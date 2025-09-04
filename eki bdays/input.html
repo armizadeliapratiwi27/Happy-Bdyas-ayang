@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Input Data Arsip</title>
+    <link rel="stylesheet" href="style5.css">
+</head>
+<body>
+    <div class="container">
+        <div class="left-side">
+            <a href="profile.html" class="profile-link">
+                <img src="logoprofile.png" alt="Logo" class="logo">
+            </a>
+            <span id="usernameText" class="username-text"></span>
+            <div class="hamburger-menu">
+                <div></div>
+                <div></div>
+                <div></div>
+                <div class="menu-item">
+                    <img src="iconfile.png" alt="File Logo" class="menu-logo">
+                    <label for="arsipberkas" class="menu-label">About You</label>
+                </div>
+            </div>
+            <button class="button" onclick="location.href='input.html'">Tentang Kamu</button>
+            <a href="home.html" class="nav-link back-button">Back</a>
+        </div>
+        
+        <div class="right-side">
+            <h2>Selamat Ulang Tahun Sayang, This is Memori After Breakup With You</h2>
+            <form id="dataForm">
+                <div class="form-group">
+                    <label for="ucapan">kamu inget ga pertama kali kita deket lagi setelah asing itu karena kamu di bandar lampung, terus kamu mau ngajak aku jalan tapi ngajakin diva sepupu kamu, and than yang ngajakin aku main bukan kamu tapi diva, dia bilang main yokk bareng adin juga nanti, agak sedikit syok yaa saya haha, karena emang kita udah lama lose contac, belum sampe distu syoknya beberapa menit kemudian kamu chat langsung di wa nanyaiin kabarku, walaupun aku tau itu basabasi doang haha, terus ga tau apa selanjutnya kita mainnya berdua aja tanpa diva, tapi yang paling memoriable malem itu di otak aku cuma satu moment, moment dimana kamu mau beliin aku jajan tapi sengaja cari minimarket yang jauh haha kamu mau ngulur waktu biar ga cepet sampe kost aku tau itu 
+                    </label>
+                </div>
+            
+                <div class="form-group">
+                    <label for="ucapan">aku selalu tanya sama kamu kenapa kamu pilih aku lagi, tapi aku ga pernah dapet jawaban yang jelas dari kamu, agak sedikit heran dari kita deket lagi after asing bertahun tahun kita pernah intens lagi chatan terus kita asing lagi, sampe akhirnya ya kita ada di fase ini, kamu ada lagi dan lagi aku ga tau karena apa tapi yang jelas im so happy.
+                    </label>
+                </div>
+        </div>
+    </div>
+
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const loggedInUser = JSON.parse(sessionStorage.getItem('loggedInUser'));
+            if (!loggedInUser) {
+                window.location.href = 'login.html';
+            } else {
+                const usernameText = document.getElementById('usernameText');
+                if (usernameText) {
+                    usernameText.textContent = loggedInUser.username;
+                }
+            }
+
+            document.getElementById('submitButton').addEventListener('click', () => {
+                const form = document.getElementById('dataForm');
+                
+                if (!form.checkValidity()) {
+                    alert('Please fill out all required fields.');
+                    return;
+                }
+
+                const formData = new FormData(form);
+                const file = formData.get('berkas');
+                const reader = new FileReader();
+
+                reader.onload = function(event) {
+                    const dataArsip = JSON.parse(localStorage.getItem('dataArsip')) || [];
+                    const newData = {
+                        timestamp: new Date().getTime(),
+                        username: loggedInUser.username,
+                        namaPenginput: formData.get('namaPenginput'),
+                        noBa: formData.get('noBa'),
+                        namaKapal: formData.get('namaKapal'),
+                        tanggalPranota: formData.get('tanggalPranota'),
+                        tertagih: formData.get('tertagih'),
+                        berkasUrl: event.target.result
+                    };
+                    dataArsip.push(newData);
+                    localStorage.setItem('dataArsip', JSON.stringify(dataArsip));
+                    alert('Data berhasil disimpan.');
+                    window.location.href = 'filearsip.html';
+                };
+
+                reader.readAsDataURL(file);
+            });
+
+            document.getElementById('cancelButton').addEventListener('click', () => {
+                document.getElementById('dataForm').reset();
+            });
+        });
+    </script>
+</body>
+</html>
